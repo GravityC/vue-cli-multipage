@@ -3,7 +3,6 @@
 
 ## 使用方法
 
-``` bash
 # 安装依赖
 npm install
 
