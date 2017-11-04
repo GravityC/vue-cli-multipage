@@ -7,15 +7,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 exports.getPages = function () {
   const pages = [];
-  let name, html, js;
 
   const globpath = './src/pages/*';
   const _pages = glob.sync(globpath);
   for (let page of _pages){
-    name = path.basename(page);
-    html = glob.sync(page + '/app.html')[0]
-    js = page + '/app.js';
-    pages.push({ name, html, js });
+    pages.push({
+      static:glob.sync(path.join(__dirname, '..', page) + '/static')[0],  //各个static目录绝对路径
+      name:path.basename(page),
+      html:glob.sync(page + '/app.html')[0],
+      js:page + '/app.js',
+    })
   }
   return pages;
 };
@@ -30,7 +31,7 @@ exports.getEntries = function () {
   return entries;
 };
 
-exports.getHtmls = function () {
+exports.getHtmlWebpackPlugins = function () {
   const pages = exports.getPages();
 
   const htmls = [];
@@ -51,6 +52,22 @@ exports.getHtmls = function () {
     htmls.push(html)
   }
   return htmls;
+};
+
+exports.getCopyWebpackPlugins = function () {
+  const CopyWebpackPlugins = [];
+  const pages = exports.getPages();
+
+  for (let page of pages) {
+    if(page.static){
+      CopyWebpackPlugins.push({
+        from:page.static,
+        to:config.build.assetsSubDirectory,
+        ignore: ['.*']
+      })
+    }
+  }
+  return CopyWebpackPlugins;
 };
 
 exports.assetsPath = function (_path) {

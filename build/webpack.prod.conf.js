@@ -75,9 +75,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
-      }
+      },
+      ...utils.getCopyWebpackPlugins()
     ]),
-    ...utils.getHtmls(),
+    ...utils.getHtmlWebpackPlugins(),
   ]
 })
 

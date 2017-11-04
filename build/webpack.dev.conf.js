@@ -1,4 +1,5 @@
 'use strict'
+
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
@@ -26,7 +27,7 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new FriendlyErrorsPlugin(),
-    ...utils.getHtmls(),
+    ...utils.getHtmlWebpackPlugins(),
   ]
 })
 

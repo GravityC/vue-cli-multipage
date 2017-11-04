@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../../assets/logo.png">
+    <img src="./static/img/test_index.png"/>
     <div>
       {{msg}}
     </div>
@@ -16,7 +16,7 @@
         msg: 'this is index',
         to: 'to home'
       }
-    }
+    },
   }
 </script>
 <style>

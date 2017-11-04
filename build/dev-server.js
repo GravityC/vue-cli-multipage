@@ -12,6 +12,7 @@ const express = require('express')
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./webpack.dev.conf')
+const utils = require('./utils')
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
@@ -64,6 +65,12 @@ app.use(devMiddleware)
 
 // serve pure static assets
 const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+const pages = utils.getPages();
+for (let page of pages) {
+  if(page.static) {
+    app.use(staticPath, express.static(page.static))
+  }
+}
 app.use(staticPath, express.static('./static'))
 
 const uri = 'http://localhost:' + port
