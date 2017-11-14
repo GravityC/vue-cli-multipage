@@ -1,8 +1,8 @@
 {
-  "name": "my-multipage-demo",
+  "name": "vue-cli-multipage",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "[username] <[email]>",
+  "description": "vue-cli-multipage",
+  "author": "[langzai] <[410310344@qq.com]>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
