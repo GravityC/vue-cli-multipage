@@ -31,7 +31,6 @@ exports.getHtmlWebpackPlugins = function () {
   const conf = {
     template: path.join(__dirname, '..', 'src/index.html'),
     inject: true,
-    chunks:['manifest', 'vendor'],
   };
   if (process.env.NODE_ENV === 'production') {
     conf['minify'] = {
@@ -43,7 +42,7 @@ exports.getHtmlWebpackPlugins = function () {
   }
   for (let page of pages) {
     conf['filename'] = `${config.build.index}/${page.name}.html`;
-    conf['chunks'].push(page.name);
+    conf['chunks'] = ['manifest', 'vendor', page.name];
     htmls.push(new HtmlWebpackPlugin(conf))
   }
   return htmls;

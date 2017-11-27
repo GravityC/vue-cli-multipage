@@ -5,7 +5,6 @@
     <div>
       <a href="index.html">{{to}}</a>
     </div>
-    <img src="./static/img/test_home.png">
   </div>
 </template>
 <script>

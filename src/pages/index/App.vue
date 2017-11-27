@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./static/img/test_index.png"/>
     <div>
       {{msg}}
     </div>
