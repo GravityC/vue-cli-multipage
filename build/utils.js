@@ -5,25 +5,20 @@ const config = require('../config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-exports.getPages = function () {
-  const pages = [];
+const pages = [];
 
-  const globpath = './src/pages/*';
-  const _pages = glob.sync(globpath);
-  for (let page of _pages){
-    pages.push({
-      static:glob.sync(path.join(__dirname, '..', page) + '/static')[0],  //各个static目录绝对路径
-      name:path.basename(page),
-      html:glob.sync(page + '/app.html')[0],
-      js:page + '/app.js',
-    })
-  }
-  return pages;
-};
+const globpath = './src/pages/*';
+const _pages = glob.sync(globpath);
+for (let page of _pages){
+  pages.push({
+    name:path.basename(page),
+    js:page + '/app.js',
+  })
+}
+
+exports.pages = pages;
 
 exports.getEntries = function () {
-  const pages = exports.getPages();
-
   const entries = {};
   for (let page of pages) {
     entries[page.name] = page.js;
@@ -32,42 +27,26 @@ exports.getEntries = function () {
 };
 
 exports.getHtmlWebpackPlugins = function () {
-  const pages = exports.getPages();
-
   const htmls = [];
-  let html;
+  const conf = {
+    template: path.join(__dirname, '..', 'src/index.html'),
+    inject: true,
+    chunks:['manifest', 'vendor'],
+  };
+  if (process.env.NODE_ENV === 'production') {
+    conf['minify'] = {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true
+    };
+    conf['chunkSortMode'] = 'dependency';
+  }
   for (let page of pages) {
-    html = new HtmlWebpackPlugin({
-      filename: `${config.build.index}/${page.name}.html`,
-      template: page.html || path.join(__dirname, '..', 'src/index.html'),
-      inject: true,
-      chunks:['manifest', 'vendor', page.name],
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-      },
-      chunksSortMode: 'dependency'
-    });
-    htmls.push(html)
+    conf['filename'] = `${config.build.index}/${page.name}.html`;
+    conf['chunks'].push(page.name);
+    htmls.push(new HtmlWebpackPlugin(conf))
   }
   return htmls;
-};
-
-exports.getCopyWebpackPlugins = function () {
-  const CopyWebpackPlugins = [];
-  const pages = exports.getPages();
-
-  for (let page of pages) {
-    if(page.static){
-      CopyWebpackPlugins.push({
-        from:page.static,
-        to:config.build.assetsSubDirectory,
-        ignore: ['.*']
-      })
-    }
-  }
-  return CopyWebpackPlugins;
 };
 
 exports.assetsPath = function (_path) {

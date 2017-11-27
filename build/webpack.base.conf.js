@@ -3,12 +3,13 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const vuxLoader = require('vux-loader');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
+const webpackConfig = {
   entry: utils.getEntries(),
   output: {
     path: config.build.assetsRoot,
@@ -18,10 +19,13 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
+    modules:[resolve('node_modules')],
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'components':resolve('src/components'),
+      'assets':resolve('src/assets')
     }
   },
   module: {
@@ -29,19 +33,19 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: vueLoaderConfig,
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        loader: 'babel-loader?cacheDirectory=true',
+        include: [resolve('src')],
+        exclude:/node_modules/
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          // name: utils.assetsPath('img/[name].[hash:7].[ext]')
           name: utils.assetsPath('img/[name].[ext]')
         }
       },
@@ -50,19 +54,21 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          // name: utils.assetsPath('media/[name].[hash:7].[ext]')
           name: utils.assetsPath('media/[name].[ext]')
-        }
+        },
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          // name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
           name: utils.assetsPath('fonts/[name].[ext]')
         }
       }
     ]
-  }
+  },
 }
+
+module.exports = vuxLoader.merge(webpackConfig,{
+  plugins:['vux-ui']
+})

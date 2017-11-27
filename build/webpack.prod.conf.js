@@ -76,7 +76,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       },
-      ...utils.getCopyWebpackPlugins()
     ]),
     ...utils.getHtmlWebpackPlugins(),
   ]
