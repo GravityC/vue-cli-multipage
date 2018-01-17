@@ -36,7 +36,7 @@ const webpackConfig = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader?cacheDirectory=true',
+        loader: 'babel-loader',
         include: [resolve('src')],
         exclude:/node_modules/
       },
