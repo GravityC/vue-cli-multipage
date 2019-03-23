@@ -18,4 +18,3 @@ npm run build
 每个页面默认使用src/index.html作为模版
 <br>2、公共css、js文件放在static文件夹下(项目中已有示例)
 
-##### 如有疑问请联系QQ410310344
